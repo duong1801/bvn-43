@@ -21,6 +21,7 @@ function Task({ task }) {
 						<TextField
 							label="Sửa việc làm"
 							variant="outlined"
+							// eslint-disable-next-line react/prop-types
 							value={task.todo}
 							sx={{
 								// backgroundColor: "#bdc3c7",
@@ -44,7 +45,7 @@ function Task({ task }) {
 										borderColor: "#3498db",
 									},
 								},
-								minWidth: "250px",
+								minWidth: "450px",
 								mr: 2,
 							}}
 						/>
