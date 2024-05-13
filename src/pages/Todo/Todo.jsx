@@ -38,17 +38,23 @@ function Todo() {
 	}
 
 	const handleUpdateTask = async (id, data) => {
-		console.log(id, data)
-		// const response = await client.removeTodo(id)
-		// if (response.code === 200) {
-		// 	setTasks((prevStasks) => {
-		// 		const newTasks = [...prevStasks].filter((tasks) => tasks._id !== id)
-		// 		return newTasks
-		// 	})
-		// 	toast.success("Xoá công việc thành công!")
-		// } else {
-		// 	toast.error("Có lỗi xảy ra vui lòng kiểm tra!")
-		// }
+		if (!data) {
+			toast.error("Vui lòng nhập công việc!")
+			return
+		}
+		const response = await client.editTodo(id, data)
+
+		if (response.code === 200) {
+			setTasks((prevStasks) => {
+				const newTasks = [...prevStasks]
+				const taskUpdated = newTasks.find((task) => task._id === id)
+				taskUpdated.todo = data
+				return newTasks
+			})
+			toast.success("Cập nhật việc thành công!")
+		} else {
+			toast.error("Có lỗi xảy ra vui lòng kiểm tra!")
+		}
 	}
 
 	useEffect(() => {

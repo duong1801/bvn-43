@@ -5,11 +5,13 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import SendIcon from "@mui/icons-material/Send"
 import EditIcon from "@mui/icons-material/Edit"
 import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt"
+import { toast } from "react-toastify"
 // eslint-disable-next-line react/prop-types
 function Task({ task, handleDeleteTask, handleUpdateTask }) {
 	const [updating, setUpdating] = useState(false)
 	const [loading, setLoading] = useState(false)
-	const [taskUpdate, setTaskUpdate] = useState("")
+	const [updateLoading, setUpdateLoading] = useState(false)
+	const [taskUpdate, setTaskUpdate] = useState(task.todo)
 	const handleWhenClickBtnDelete = async () => {
 		const isDelete = confirm(`Bạn chắc chắn muốn xoá`)
 		if (!isDelete) return
@@ -20,6 +22,13 @@ function Task({ task, handleDeleteTask, handleUpdateTask }) {
 	}
 	const toggleUpdating = () => {
 		setUpdating(!updating)
+	}
+
+	const handleWhenClickBtnUpdate = async () => {
+		setUpdateLoading(true)
+		await handleUpdateTask(task._id, taskUpdate)
+		setUpdateLoading(false)
+		setUpdating(false)
 	}
 	return (
 		<Card
@@ -34,8 +43,11 @@ function Task({ task, handleDeleteTask, handleUpdateTask }) {
 						<TextField
 							label="Sửa việc làm"
 							variant="outlined"
+							onChange={(e) => {
+								setTaskUpdate(e.target.value)
+							}}
 							// eslint-disable-next-line react/prop-types
-							value={task.todo}
+							defaultValue={task.todo}
 							sx={{
 								// backgroundColor: "#bdc3c7",
 								"& label": {
@@ -65,11 +77,12 @@ function Task({ task, handleDeleteTask, handleUpdateTask }) {
 						/>
 						<LoadingButton
 							endIcon={<SendIcon />}
-							// loading={loading}
+							loading={updateLoading}
 							loadingPosition="end"
 							variant="contained"
-							onClick={handleUpdateTask(task._id, taskUpdate)}
+							onClick={handleWhenClickBtnUpdate}
 							size="lg"
+							type="button"
 							sx={{
 								height: "40px",
 								border: "1px solid #3498db",
