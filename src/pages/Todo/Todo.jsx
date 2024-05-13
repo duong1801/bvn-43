@@ -37,6 +37,20 @@ function Todo() {
 		}
 	}
 
+	const handleUpdateTask = async (id, data) => {
+		console.log(id, data)
+		// const response = await client.removeTodo(id)
+		// if (response.code === 200) {
+		// 	setTasks((prevStasks) => {
+		// 		const newTasks = [...prevStasks].filter((tasks) => tasks._id !== id)
+		// 		return newTasks
+		// 	})
+		// 	toast.success("Xoá công việc thành công!")
+		// } else {
+		// 	toast.error("Có lỗi xảy ra vui lòng kiểm tra!")
+		// }
+	}
+
 	useEffect(() => {
 		;(async () => {
 			// await client.getApiKey()
@@ -59,7 +73,11 @@ function Todo() {
 			</Typography>
 			<Box sx={{ maxWidth: "600px", margin: "0px auto" }}>
 				<TodoForm handleAddTask={handleAddTask} />
-				<ListTasks handleDeleteTask={handleDeleteTask} tasks={tasks} />
+				<ListTasks
+					handleDeleteTask={handleDeleteTask}
+					handleUpdateTask={handleUpdateTask}
+					tasks={tasks}
+				/>
 			</Box>
 		</Container>
 	) : (

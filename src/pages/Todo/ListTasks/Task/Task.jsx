@@ -6,9 +6,10 @@ import SendIcon from "@mui/icons-material/Send"
 import EditIcon from "@mui/icons-material/Edit"
 import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt"
 // eslint-disable-next-line react/prop-types
-function Task({ task, handleDeleteTask }) {
+function Task({ task, handleDeleteTask, handleUpdateTask }) {
 	const [updating, setUpdating] = useState(false)
 	const [loading, setLoading] = useState(false)
+	const [taskUpdate, setTaskUpdate] = useState("")
 	const handleWhenClickBtnDelete = async () => {
 		const isDelete = confirm(`Bạn chắc chắn muốn xoá`)
 		if (!isDelete) return
@@ -42,6 +43,7 @@ function Task({ task, handleDeleteTask }) {
 								},
 								"& input": {
 									color: "#3498db",
+									fontSize: 15,
 								},
 								"& label.Mui-focused": {
 									color: "#3498db",
@@ -66,7 +68,7 @@ function Task({ task, handleDeleteTask }) {
 							// loading={loading}
 							loadingPosition="end"
 							variant="contained"
-							onClick={toggleUpdating}
+							onClick={handleUpdateTask(task._id, taskUpdate)}
 							size="lg"
 							sx={{
 								height: "40px",
@@ -104,6 +106,7 @@ function Task({ task, handleDeleteTask }) {
 								loading={loading}
 								loadingPosition="end"
 								variant="contained"
+								onClick={handleWhenClickBtnDelete}
 								size="lg"
 								sx={{
 									height: "40px",
