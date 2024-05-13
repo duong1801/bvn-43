@@ -61,8 +61,26 @@ const addTodo = async (data) => {
 	return todo
 }
 
+const removeTodo = async (id) => {
+	const response = await fetch(`${config.API_ROOT}/todos/${id}`, {
+		...options,
+		method: "DELETE",
+	})
+	if (!response.ok) {
+		await refreshApiKey()
+		options.headers["X-Api-Key"] = apiKey
+		const response = await fetch(`${config.API_ROOT}/todos/${id}`, {
+			...options,
+			method: "DELETE",
+		})
+		const todo = await response.json()
+		return todo
+	}
+	const todo = await response.json()
+	return todo
+}
 export const client = {
 	getTodo,
-	getApiKey,
 	addTodo,
+	removeTodo,
 }

@@ -9,24 +9,32 @@ import ListTasks from "./ListTasks/ListTasks"
 import CircularProgress from "@mui/material/CircularProgress"
 
 function Todo() {
-	const [tasks, setTasks] = useState([])
-	const [loading, setLoading] = useState(false)
+	const [tasks, setTasks] = useState(null)
 
 	const handleAddTask = async (task) => {
 		if (!task) {
 			toast.error("Vui lòng nhập công việc!")
 			return
 		}
-		setLoading(true)
+
 		const response = await client.addTodo(task)
 		const newTask = response?.data
 		setTasks([newTask, ...tasks])
-		setLoading(false)
+
 		toast.success("Thêm mới công việc thành công!")
 	}
 
-	const handleDeleteTask = (id) => {
-		console.log(id)
+	const handleDeleteTask = async (id) => {
+		const response = await client.removeTodo(id)
+		if (response.code === 200) {
+			setTasks((prevStasks) => {
+				const newTasks = [...prevStasks].filter((tasks) => tasks._id !== id)
+				return newTasks
+			})
+			toast.success("Xoá công việc thành công!")
+		} else {
+			toast.error("Có lỗi xảy ra vui lòng kiểm tra!")
+		}
 	}
 
 	useEffect(() => {
@@ -36,7 +44,7 @@ function Todo() {
 			setTasks(response?.data?.listTodo)
 		})()
 	}, [])
-	return tasks.length ? (
+	return tasks ? (
 		<Container
 			sx={{ bgcolor: "#45aaf2", minHeight: "100vh", p: 2, color: "white" }}>
 			<Typography
@@ -50,7 +58,7 @@ function Todo() {
 				Todo List
 			</Typography>
 			<Box sx={{ maxWidth: "600px", margin: "0px auto" }}>
-				<TodoForm handleAddTask={handleAddTask} loading={loading} />
+				<TodoForm handleAddTask={handleAddTask} />
 				<ListTasks handleDeleteTask={handleDeleteTask} tasks={tasks} />
 			</Box>
 		</Container>

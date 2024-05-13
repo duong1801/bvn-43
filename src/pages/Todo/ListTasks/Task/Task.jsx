@@ -8,6 +8,13 @@ import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt"
 // eslint-disable-next-line react/prop-types
 function Task({ task, handleDeleteTask }) {
 	const [updating, setUpdating] = useState(false)
+	const [loading, setLoading] = useState(false)
+	const handleWhenClickBtnDelete = async () => {
+		setLoading(true)
+		// eslint-disable-next-line react/prop-types
+		await handleDeleteTask(task._id)
+		setLoading(false)
+	}
 	const toggleUpdating = () => {
 		setUpdating(!updating)
 	}
@@ -92,7 +99,7 @@ function Task({ task, handleDeleteTask }) {
 							</LoadingButton>
 							<LoadingButton
 								endIcon={<SendIcon />}
-								// loading={loading}
+								loading={loading}
 								loadingPosition="end"
 								variant="contained"
 								size="lg"
@@ -135,11 +142,8 @@ function Task({ task, handleDeleteTask }) {
 						</LoadingButton>
 						<LoadingButton
 							endIcon={<SendIcon />}
-							onClick={() => {
-								// eslint-disable-next-line react/prop-types
-								console.log(task._id)
-							}}
-							// loading={loading}
+							onClick={handleWhenClickBtnDelete}
+							loading={loading}
 							loadingPosition="end"
 							variant="contained"
 							size="lg"
