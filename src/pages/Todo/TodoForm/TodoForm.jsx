@@ -6,24 +6,28 @@
 
 /** @format */
 import { useState } from "react"
-import { Box, Button, TextField } from "@mui/material"
-// import { useState } from "react"
+import { Box, TextField } from "@mui/material"
+import LoadingButton from "@mui/lab/LoadingButton"
+import SendIcon from "@mui/icons-material/Send"
 // eslint-disable-next-line react/prop-types
-function TodoForm({ handleAddTask }) {
+function TodoForm({ handleAddTask, loading, showLoading }) {
 	const [newTask, setNewTask] = useState("")
+	const handleSubmit = (e) => {
+		e.preventDefault()
+		showLoading()
+		handleAddTask(newTask)
+		setNewTask("")
+	}
 
 	return (
 		<Box sx={{ mb: 3 }}>
-			<form
-				onSubmit={(e) => {
-					e.preventDefault()
-					handleAddTask(newTask)
-				}}>
+			<form onSubmit={handleSubmit}>
 				<Box sx={{ display: "flex", alignItems: "center" }}>
 					<TextField
 						onChange={(e) => {
 							setNewTask(e.target.value)
 						}}
+						value={newTask}
 						label="Thêm mới việc làm"
 						variant="outlined"
 						sx={{
@@ -52,9 +56,12 @@ function TodoForm({ handleAddTask }) {
 							mr: 2,
 						}}
 					/>
-					<Button
+					<LoadingButton
+						endIcon={<SendIcon />}
+						loading={loading}
+						loadingPosition="end"
+						variant="contained"
 						type="submit"
-						variant="outlined"
 						size="lg"
 						sx={{
 							height: "40px",
@@ -66,7 +73,7 @@ function TodoForm({ handleAddTask }) {
 							},
 						}}>
 						Thêm mới
-					</Button>
+					</LoadingButton>
 				</Box>
 			</form>
 		</Box>

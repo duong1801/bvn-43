@@ -9,17 +9,18 @@ import ListTasks from "./ListTasks/ListTasks"
 
 function Todo() {
 	const [tasks, setTasks] = useState([])
+	const [loading, setLoading] = useState(false)
+	const showLoading = () => setLoading(true)
 	const handleAddTask = async (task) => {
 		if (!task) {
-			toast.error("Vui lòng nhập công việc!", {
-				position: "bottom-right",
-			})
+			toast.error("Vui lòng nhập công việc!")
 			return
 		}
 		const response = await client.addTodo(task)
 		const newTask = response?.data
-		const newTasks = [newTask, ...tasks]
-		setTasks(newTasks)
+		setTasks([newTask, ...tasks])
+		setLoading(false)
+		toast.success("Thêm mới công việc thành công!")
 	}
 
 	useEffect(() => {
@@ -43,7 +44,11 @@ function Todo() {
 				Todo List
 			</Typography>
 			<Box sx={{ maxWidth: "600px", margin: "0px auto" }}>
-				<TodoForm handleAddTask={handleAddTask} />
+				<TodoForm
+					handleAddTask={handleAddTask}
+					loading={loading}
+					showLoading={showLoading}
+				/>
 				<ListTasks tasks={tasks} />
 			</Box>
 		</Container>
