@@ -14,8 +14,7 @@ function Todo() {
 	useEffect(() => {
 		;(async () => {
 			const response = await client.getTodo()
-			console.log(response)
-			// setTasks(response?.data?.listTodo)
+			setTasks(response?.data?.listTodo)
 		})()
 	}, [])
 	return (
