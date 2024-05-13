@@ -79,8 +79,30 @@ const removeTodo = async (id) => {
 	const todo = await response.json()
 	return todo
 }
+
+const editTodo = async (id, data) => {
+	const response = await fetch(`${config.API_ROOT}/todos/${id}`, {
+		...options,
+		method: "PATCH",
+		body: JSON.stringify({ todo: data }),
+	})
+	if (!response.ok) {
+		await refreshApiKey()
+		options.headers["X-Api-Key"] = apiKey
+		const response = await fetch(`${config.API_ROOT}/todos/${id}`, {
+			...options,
+			method: "PATCH",
+			body: JSON.stringify({ todo: data }),
+		})
+		const todo = await response.json()
+		return todo
+	}
+	const todo = await response.json()
+	return todo
+}
 export const client = {
 	getTodo,
 	addTodo,
 	removeTodo,
+	editTodo,
 }

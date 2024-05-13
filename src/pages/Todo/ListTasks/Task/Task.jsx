@@ -10,6 +10,8 @@ function Task({ task, handleDeleteTask }) {
 	const [updating, setUpdating] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const handleWhenClickBtnDelete = async () => {
+		const isDelete = confirm(`Bạn chắc chắn muốn xoá`)
+		if (!isDelete) return
 		setLoading(true)
 		// eslint-disable-next-line react/prop-types
 		await handleDeleteTask(task._id)
