@@ -1,9 +1,12 @@
 /** @format */
 import { useState } from "react"
 import { Card, Box, Button, Typography, TextField } from "@mui/material"
-
+import LoadingButton from "@mui/lab/LoadingButton"
+import SendIcon from "@mui/icons-material/Send"
+import EditIcon from "@mui/icons-material/Edit"
+import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt"
 // eslint-disable-next-line react/prop-types
-function Task({ task }) {
+function Task({ task, handleDeleteTask }) {
 	const [updating, setUpdating] = useState(false)
 	const toggleUpdating = () => {
 		setUpdating(!updating)
@@ -36,7 +39,7 @@ function Task({ task }) {
 								},
 								"& .MuiOutlinedInput-root": {
 									"& fieldset": {
-										borderColor: "##3498db",
+										borderColor: "#3498db",
 									},
 									"&:hover fieldset": {
 										borderColor: "#3498db",
@@ -49,51 +52,60 @@ function Task({ task }) {
 								mr: 2,
 							}}
 						/>
-						<Button
-							variant="outlined"
+						<LoadingButton
+							endIcon={<SendIcon />}
+							// loading={loading}
+							loadingPosition="end"
+							variant="contained"
+							onClick={toggleUpdating}
 							size="lg"
 							sx={{
 								height: "40px",
-								border: "1px solid bdc3c7",
-								color: "bdc3c7",
+								border: "1px solid #3498db",
 								textTransform: "capitalize",
 								"&:hover": {
-									border: "1px solid #bdc3c7",
+									background: "#1565c0",
 								},
+								mr: 2,
 							}}>
 							Sửa
-						</Button>
+						</LoadingButton>
 					</Box>
 					<Box>
 						<Box>
-							<Button
+							<LoadingButton
+								endIcon={<DoDisturbAltIcon />}
 								onClick={toggleUpdating}
-								variant="outlined"
+								loadingPosition="end"
+								variant="contained"
 								size="lg"
 								sx={{
 									height: "40px",
 									border: "1px solid #3498db",
 									textTransform: "capitalize",
 									"&:hover": {
-										background: "#ecf0f1",
+										background: "#1565c0",
 									},
 									mr: 2,
 								}}>
 								Thoát
-							</Button>
-							<Button
-								variant="outlined"
+							</LoadingButton>
+							<LoadingButton
+								endIcon={<SendIcon />}
+								// loading={loading}
+								loadingPosition="end"
+								variant="contained"
 								size="lg"
 								sx={{
 									height: "40px",
 									border: "1px solid #3498db",
 									textTransform: "capitalize",
 									"&:hover": {
-										background: "#ecf0f1",
+										background: "#1565c0",
 									},
 								}}>
 								Xoá
-							</Button>
+							</LoadingButton>
 						</Box>
 					</Box>
 				</Box>
@@ -103,34 +115,44 @@ function Task({ task }) {
 						<Typography>{task.todo}</Typography>
 					</Box>
 					<Box>
-						<Button
+						<LoadingButton
+							endIcon={<EditIcon />}
+							// loading={loading}
+							loadingPosition="end"
+							variant="contained"
 							onClick={toggleUpdating}
-							variant="outlined"
 							size="lg"
 							sx={{
 								height: "40px",
 								border: "1px solid #3498db",
 								textTransform: "capitalize",
 								"&:hover": {
-									background: "#ecf0f1",
+									background: "#1565c0",
 								},
 								mr: 2,
 							}}>
 							Sửa
-						</Button>
-						<Button
-							variant="outlined"
+						</LoadingButton>
+						<LoadingButton
+							endIcon={<SendIcon />}
+							onClick={() => {
+								// eslint-disable-next-line react/prop-types
+								console.log(task._id)
+							}}
+							// loading={loading}
+							loadingPosition="end"
+							variant="contained"
 							size="lg"
 							sx={{
 								height: "40px",
 								border: "1px solid #3498db",
 								textTransform: "capitalize",
 								"&:hover": {
-									background: "#ecf0f1",
+									background: "#1565c0",
 								},
 							}}>
 							Xoá
-						</Button>
+						</LoadingButton>
 					</Box>
 				</Box>
 			)}

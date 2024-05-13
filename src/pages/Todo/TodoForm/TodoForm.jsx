@@ -10,11 +10,10 @@ import { Box, TextField } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import SendIcon from "@mui/icons-material/Send"
 // eslint-disable-next-line react/prop-types
-function TodoForm({ handleAddTask, loading, showLoading }) {
+function TodoForm({ handleAddTask, loading }) {
 	const [newTask, setNewTask] = useState("")
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		showLoading()
 		handleAddTask(newTask)
 		setNewTask("")
 	}

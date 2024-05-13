@@ -6,21 +6,27 @@ import { client } from "../../apis"
 import { toast } from "react-toastify"
 import TodoForm from "./TodoForm/TodoForm"
 import ListTasks from "./ListTasks/ListTasks"
+import CircularProgress from "@mui/material/CircularProgress"
 
 function Todo() {
 	const [tasks, setTasks] = useState([])
 	const [loading, setLoading] = useState(false)
-	const showLoading = () => setLoading(true)
+
 	const handleAddTask = async (task) => {
 		if (!task) {
 			toast.error("Vui lòng nhập công việc!")
 			return
 		}
+		setLoading(true)
 		const response = await client.addTodo(task)
 		const newTask = response?.data
 		setTasks([newTask, ...tasks])
 		setLoading(false)
 		toast.success("Thêm mới công việc thành công!")
+	}
+
+	const handleDeleteTask = (id) => {
+		console.log(id)
 	}
 
 	useEffect(() => {
@@ -30,7 +36,7 @@ function Todo() {
 			setTasks(response?.data?.listTodo)
 		})()
 	}, [])
-	return (
+	return tasks.length ? (
 		<Container
 			sx={{ bgcolor: "#45aaf2", minHeight: "100vh", p: 2, color: "white" }}>
 			<Typography
@@ -44,14 +50,20 @@ function Todo() {
 				Todo List
 			</Typography>
 			<Box sx={{ maxWidth: "600px", margin: "0px auto" }}>
-				<TodoForm
-					handleAddTask={handleAddTask}
-					loading={loading}
-					showLoading={showLoading}
-				/>
-				<ListTasks tasks={tasks} />
+				<TodoForm handleAddTask={handleAddTask} loading={loading} />
+				<ListTasks handleDeleteTask={handleDeleteTask} tasks={tasks} />
 			</Box>
 		</Container>
+	) : (
+		<Box
+			sx={{
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				height: "100vh",
+			}}>
+			<CircularProgress disableShrink />
+		</Box>
 	)
 }
 
