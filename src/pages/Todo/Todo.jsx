@@ -58,10 +58,8 @@ function Todo() {
 	}
 
 	const handleSearchTask = async (keyword) => {
-		console.log(keyword)
 		const response = await client.searchTodo(keyword)
 		const data = await response.data
-		console.log(data)
 		setTasks(data.listTodo)
 	}
 

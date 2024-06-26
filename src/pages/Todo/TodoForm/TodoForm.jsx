@@ -28,12 +28,17 @@ function TodoForm({ handleAddTask, handleSearchTask }) {
 		setNewTask("")
 	}
 
-	const debounceSearch = debounce(async (value) => {
-		await handleSearchTask(value)
-	}, 300)
+	const debounceSearch = useCallback(
+		debounce((value) => {
+			handleSearchTask(value)
+		}, 500),
+		[]
+	)
 
 	const handleChangeKeyWordsForm = (e) => {
+		console.log(e.target.value)
 		setNewTask(e.target.value)
+		console.log(searchMode)
 		if (searchMode) {
 			debounceSearch(e.target.value)
 		}
@@ -47,8 +52,8 @@ function TodoForm({ handleAddTask, handleSearchTask }) {
 		if (!searchMode) {
 			setSearchLoading(true)
 		}
+		setSearchMode(true)
 		setTimeout(() => {
-			setSearchMode(true)
 			setSearchLoading(false)
 			toast.success("Đã chuyển qua chế độ tìm kiếm!")
 		}, 1000)
@@ -60,7 +65,7 @@ function TodoForm({ handleAddTask, handleSearchTask }) {
 				<Box sx={{ display: "flex", alignItems: "center" }}>
 					<TextField
 						ref={formRef}
-						onInput={handleChangeKeyWordsForm}
+						onChange={handleChangeKeyWordsForm}
 						value={newTask}
 						label={!searchMode ? "Thêm mới việc làm" : "Tìm kiếm việc làm"}
 						variant="outlined"
