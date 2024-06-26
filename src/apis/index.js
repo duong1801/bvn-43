@@ -100,9 +100,26 @@ const editTodo = async (id, data) => {
 	const todo = await response.json()
 	return todo
 }
+
+const searchTodo = async (keywords) => {
+	const response = await fetch(
+		`${config.API_ROOT}/todos?q=${keywords}`,
+		options
+	)
+	if (!response.ok) {
+		await refreshApiKey()
+		options.headers["X-Api-Key"] = apiKey
+		const response = await fetch(`${config.API_ROOT}/todos`, options)
+		const todos = await response.json()
+		return todos
+	}
+	const todos = await response.json()
+	return todos
+}
 export const client = {
 	getTodo,
 	addTodo,
 	removeTodo,
 	editTodo,
+	searchTodo,
 }

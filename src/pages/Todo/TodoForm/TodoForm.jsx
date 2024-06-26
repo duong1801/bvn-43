@@ -5,17 +5,20 @@
  */
 
 /** @format */
-import { useState } from "react"
+import { useState, useRef, useCallback } from "react"
 import { Box, TextField } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import SendIcon from "@mui/icons-material/Send"
 import { toast } from "react-toastify"
+import { debounce } from "../../../utils/utils"
 // eslint-disable-next-line react/prop-types
-function TodoForm({ handleAddTask }) {
+function TodoForm({ handleAddTask, handleSearchTask }) {
 	const [newTask, setNewTask] = useState("")
 	const [addLoading, setAddLoading] = useState(false)
 	const [searchLoading, setSearchLoading] = useState(false)
 	const [searchMode, setSearchMode] = useState(false)
+	const formRef = useRef(null)
+
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		setAddLoading(true)
@@ -24,16 +27,26 @@ function TodoForm({ handleAddTask }) {
 		setSearchMode(false)
 		setNewTask("")
 	}
+
+	const debounceSearch = debounce(async (value) => {
+		await handleSearchTask(value)
+	}, 300)
+
+	const handleChangeKeyWordsForm = (e) => {
+		setNewTask(e.target.value)
+		if (searchMode) {
+			debounceSearch(e.target.value)
+		}
+	}
+
 	const handleChangeSearchMode = (e) => {
 		e.preventDefault()
-
-		if (searchMode) {
-			toast.success("Bạn đang ở chế độ tìm kiếm chế độ tìm kiếm!")
-			return
+		if (newTask) {
+			handleSearchTask(newTask)
 		}
-
-		setSearchLoading(true)
-
+		if (!searchMode) {
+			setSearchLoading(true)
+		}
 		setTimeout(() => {
 			setSearchMode(true)
 			setSearchLoading(false)
@@ -46,9 +59,8 @@ function TodoForm({ handleAddTask }) {
 			<form onSubmit={handleSubmit}>
 				<Box sx={{ display: "flex", alignItems: "center" }}>
 					<TextField
-						onChange={(e) => {
-							setNewTask(e.target.value)
-						}}
+						ref={formRef}
+						onInput={handleChangeKeyWordsForm}
 						value={newTask}
 						label={!searchMode ? "Thêm mới việc làm" : "Tìm kiếm việc làm"}
 						variant="outlined"
@@ -104,7 +116,7 @@ function TodoForm({ handleAddTask }) {
 						endIcon={<SendIcon />}
 						loadingPosition="end"
 						variant="contained"
-						type="submit"
+						type="button"
 						size="lg"
 						color="warning"
 						loading={searchLoading}

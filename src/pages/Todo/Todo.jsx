@@ -10,11 +10,7 @@ import CircularProgress from "@mui/material/CircularProgress"
 
 function Todo() {
 	const [tasks, setTasks] = useState(null)
-	const [searchMode, setSearchMode] = useState(false)
-	const handleChangeSearchMode = (e) => {
-		e.preventDefault()
-		setSearchMode(true)
-	}
+
 	const handleAddTask = async (task) => {
 		if (!task) {
 			toast.error("Vui lòng nhập công việc!")
@@ -61,6 +57,14 @@ function Todo() {
 		}
 	}
 
+	const handleSearchTask = async (keyword) => {
+		console.log(keyword)
+		const response = await client.searchTodo(keyword)
+		const data = await response.data
+		console.log(data)
+		setTasks(data.listTodo)
+	}
+
 	useEffect(() => {
 		;(async () => {
 			// await client.getApiKey()
@@ -82,7 +86,10 @@ function Todo() {
 				Todo List
 			</Typography>
 			<Box sx={{ maxWidth: "800px", margin: "0px auto" }}>
-				<TodoForm handleAddTask={handleAddTask} />
+				<TodoForm
+					handleAddTask={handleAddTask}
+					handleSearchTask={handleSearchTask}
+				/>
 				<ListTasks
 					handleDeleteTask={handleDeleteTask}
 					handleUpdateTask={handleUpdateTask}
