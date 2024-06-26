@@ -71,7 +71,7 @@ function Task({ task, handleDeleteTask, handleUpdateTask }) {
 										borderColor: "#3498db",
 									},
 								},
-								minWidth: "450px",
+								minWidth: "600px",
 								mr: 2,
 							}}
 						/>
